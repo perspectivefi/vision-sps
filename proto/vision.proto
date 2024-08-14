@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package vision;
+
+message Contracts {
+  repeated Contract contracts = 1;
+}
+
+message Contract {
+  string address = 1;
+  uint64 blockNumber = 2;
+  string timestamp = 3;
+  uint64 ordinal = 4;
+}
+
+message Tokens {
+  repeated Token tokens = 1;
+}
+
+message Token {
+  string address = 1;
+  uint64 decimals = 3;
+}
+
+message ERC4626Tokens {
+  repeated ERC4626Token erc4626_tokens = 1;
+}
+
+message ERC4626Token {
+  string address = 1;
+  string symbol = 2;
+  uint64 decimals = 3;
+  uint64 convert_to_assets_rate = 4;
+  uint64 convert_to_shares_rate = 5;
+}

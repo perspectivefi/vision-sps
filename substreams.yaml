@@ -8,7 +8,7 @@ imports: # dependencies
 
 protobuf: # specifies custom types for use by Substreams modules
   files:
-    - example.proto
+    - vision.proto
   importPaths:
     - ./proto
 
@@ -17,17 +17,24 @@ binaries:
     type: wasm/rust-v1
     file: ./target/wasm32-unknown-unknown/release/substreams.wasm
 
-modules: # specify modules with their inputs and outputs.
-  - name: map_contract
+modules: # specify modules with their inputs and outputs.
+#  - name: map_tokens
+#    kind: map
+#    inputs:
+#      - source: sf.ethereum.type.v2.Block
+#    output:
+#      type: proto:test.Tokens
+
+  - name: map_erc4626_tokens
     kind: map
     inputs:
       - source: sf.ethereum.type.v2.Block
     output:
-      type: proto:test.Contracts
+      type: proto:test.ERC4626Tokens
 
   - name: graph_out
     kind: map
     inputs:
-      - map: map_contract
+      - map: map_erc4626_tokens
     output:
       type: proto:substreams.entity.v1.EntityChanges # this type can be consumed by Graph Node

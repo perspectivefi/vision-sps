@@ -17,3 +17,10 @@ yarn substreams:prepare # build and package the substreams module
 yarn subgraph:build # build the subgraph
 yarn deploy # deploy the subgraph
 ```
+
+## Authentication
+
+The Substreams-powered subgraph requires authentication to access the Substreams API. You can
+authenticate by setting the `SUBSTREAMS_API_KEY` environment variable:
+
+#### https://substreams.streamingfast.io/documentation/consume/authentication#authentication-with-the-graph-market
