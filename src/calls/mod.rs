@@ -14,7 +14,7 @@ pub fn get_erc4626token(token_address: Vec<u8>) -> Option<Erc4626Token> {
             token_address.clone(),
         )
         .add(
-            erc4626::functions::ConvertToShares { assets: BigInt::from(10).pow(decimals.clone().into()) },
+            erc4626::functions::ConvertToAssets { shares: BigInt::from(10).pow(decimals.clone().into()) },
             token_address.clone(),
         )
         .execute()
@@ -27,17 +27,17 @@ pub fn get_erc4626token(token_address: Vec<u8>) -> Option<Erc4626Token> {
             symbol = decoded_symbol;
         }
         None => {
-            symbol = "".to_string();
+            symbol = String::default();
         }
     };
 
     let convert_to_assets_rate: BigInt;
     match RpcBatch::decode::<_, erc4626::functions::ConvertToAssets>(&responses[1]) {
-        Some(decoded_convertToAssets) => {
-            convert_to_assets_rate = decoded_convertToAssets;
+        Some(decoded_convert_to_assets) => {
+            convert_to_assets_rate = decoded_convert_to_assets;
         }
         None => {
-            convert_to_assets_rate = BigInt::from(0u64);
+            convert_to_assets_rate = BigInt::default();
         }
     };
 

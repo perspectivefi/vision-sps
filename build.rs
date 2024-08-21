@@ -5,13 +5,5 @@ fn main() -> Result<(), anyhow::Error> {
         .generate()?
         .write_to_file("src/abi/erc4626.rs")?;
 
-    Abigen::new("CurvePool", "abi/CurvePool.json")?
-        .generate()?
-        .write_to_file("src/abi/curve_pool.rs")?;
-
-    Abigen::new("Factory", "abi/Factory.json")?
-        .generate()?
-        .write_to_file("src/abi/factory.rs")?;
-
     Ok(())
 }
