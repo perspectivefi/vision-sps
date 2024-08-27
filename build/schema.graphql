@@ -2,6 +2,9 @@ type ERC4626 @entity {
     id: ID!
     symbol: String!
     decimals: BigInt!
-    convertToAssetsRate: BigInt!
-    convertToSharesRate: BigInt!
+    asset: String!
+    totalAssets: String!
+    totalSupply: String!
+    convertToAssetsRate: String!
+    convertToSharesRate: String!
 }
