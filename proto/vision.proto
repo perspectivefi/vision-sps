@@ -10,6 +10,9 @@ message ERC4626Token {
   string address = 1;
   string symbol = 2;
   uint64 decimals = 3;
-  uint64 convert_to_assets_rate = 4;
-  uint64 convert_to_shares_rate = 5;
+  string asset = 4;
+  string total_assets = 5;
+  string total_supply = 6;
+  string convert_to_assets_rate = 7;
+  string convert_to_shares_rate = 8;
 }

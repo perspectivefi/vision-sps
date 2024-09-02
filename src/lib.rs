@@ -47,6 +47,9 @@ pub fn graph_out(tokens: Erc4626Tokens) -> Result<EntityChanges, substreams::err
             .create_row("ERC4626", contract.address)
             .set("decimals", contract.decimals)
             .set("symbol", contract.symbol)
+            .set("asset", contract.asset)
+            .set("totalAssets", contract.total_assets)
+            .set("totalSupply", contract.total_supply)
             .set("convertToAssetsRate", contract.convert_to_assets_rate)
             .set("convertToSharesRate", contract.convert_to_shares_rate);
     }
