@@ -8,6 +8,7 @@ dataSources:
     name: substream_test
     network: mainnet
     source:
+      startBlock: 20532248
       package:
         moduleName: graph_out
         file: substreams-test-v1.0.1.spkg

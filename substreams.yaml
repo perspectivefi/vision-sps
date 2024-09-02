@@ -26,6 +26,7 @@ modules: # specify modules with their inputs and outputs.
 #      type: proto:test.Tokens
 
   - name: map_erc4626_tokens
+    initialBlock: 20532248
     kind: map
     inputs:
       - source: sf.ethereum.type.v2.Block
@@ -33,6 +34,7 @@ modules: # specify modules with their inputs and outputs.
       type: proto:test.ERC4626Tokens
 
   - name: graph_out
+    initialBlock: 20532248
     kind: map
     inputs:
       - map: map_erc4626_tokens
