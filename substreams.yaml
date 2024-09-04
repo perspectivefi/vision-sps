@@ -17,26 +17,29 @@ binaries:
     type: wasm/rust-v1
     file: ./target/wasm32-unknown-unknown/release/substreams.wasm
 
-modules: # specify modules with their inputs and outputs.
-#  - name: map_tokens
-#    kind: map
-#    inputs:
-#      - source: sf.ethereum.type.v2.Block
-#    output:
-#      type: proto:test.Tokens
-
+modules:
   - name: map_erc4626_tokens
     initialBlock: 18982509
     kind: map
     inputs:
       - source: sf.ethereum.type.v2.Block
     output:
-      type: proto:test.ERC4626Tokens
+      type: proto:ERC4626Tokens
+
+  - name: map_rates
+    initialBlock: 18982509
+    kind: map
+    inputs:
+      - map: map_erc4626_tokens
+      - source: sf.ethereum.type.v2.Block
+    output:
+      type: proto:Rates
 
   - name: graph_out
     initialBlock: 18982509
     kind: map
     inputs:
       - map: map_erc4626_tokens
+      - map: map_rates
     output:
       type: proto:substreams.entity.v1.EntityChanges # this type can be consumed by Graph Node

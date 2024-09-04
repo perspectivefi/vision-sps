@@ -5,6 +5,14 @@ type ERC4626 @entity {
     asset: String!
     totalAssets: String!
     totalSupply: String!
+    rateHistory: [Rate!] @derivedFrom(field: "erc4626")
+}
+
+type Rate @entity {
+    id: ID!
+    timestamp: BigInt!
+    blockNumber: BigInt!
+    erc4626: ERC4626!
     convertToAssetsRate: String!
     convertToSharesRate: String!
 }
