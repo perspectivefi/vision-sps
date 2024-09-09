@@ -16,3 +16,16 @@ message ERC4626Token {
   string convert_to_assets_rate = 7;
   string convert_to_shares_rate = 8;
 }
+
+message Rates {
+  repeated Rate rates = 1;
+}
+
+message Rate {
+  string id = 1;
+  uint64 timestamp = 2;
+  uint64 block_number = 3;
+  string erc4626 = 4;
+  string convert_to_assets_rate = 5;
+  string convert_to_shares_rate = 6;
+}
