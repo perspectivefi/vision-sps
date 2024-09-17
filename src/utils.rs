@@ -16,7 +16,7 @@ pub fn calculate_apr(previous_rate: String, current_rate: String, time_delta: u6
     let previous_rate_big_decimal = BigDecimal::from_str(&previous_rate).unwrap_or_default();
     let current_rate_big_decimal = BigDecimal::from_str(&current_rate).unwrap_or_default();
 
-    if previous_rate_big_decimal == BigDecimal::from(0) {
+    if previous_rate_big_decimal == BigDecimal::from(0) || time_delta == 0 {
         return "0".to_string();
     }
 

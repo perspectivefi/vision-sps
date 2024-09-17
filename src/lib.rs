@@ -72,13 +72,19 @@ fn map_rates(
     let mut rates: Vec<Rate> = Vec::new();
 
     tokens.erc4626_tokens.into_iter().for_each(|erc4626| {
-        // Find the most recent rate within the last 7 days
-        let previous_rate = (1..=7).rev().find_map(|days_ago| {
-            let past_key = format_key(erc4626.address.clone(), get_day_timestamp(block.timestamp_seconds() - (days_ago * ROUNDED_ONE_DAY_IN_SECONDS)));
-            store.get_last(past_key)
+        // Find the closest rate timestamp to the one saved 7 days ago
+        let previous_rate_timestamp_day_index = (1..=7).rev().find(|days_ago| {
+            let previous_rate_timestamp = get_day_timestamp(block.timestamp_seconds() - (days_ago * ROUNDED_ONE_DAY_IN_SECONDS));
+            let past_key = format_key(erc4626.address.clone(), previous_rate_timestamp);
+
+            store.get_last(past_key).is_some()
         });
 
-        let apr = previous_rate.unwrap_or_else(|| "0".to_string());
+        let previous_rate_timestamp = get_day_timestamp(block.timestamp_seconds() - (previous_rate_timestamp_day_index.unwrap_or(0) * ROUNDED_ONE_DAY_IN_SECONDS));
+        let past_key = format_key(erc4626.address.clone(), previous_rate_timestamp);
+        let previous_rate = store.get_last(past_key).unwrap_or_else(|| "0".to_string());
+
+        let time_delta = block.timestamp_seconds() - previous_rate_timestamp;
 
         rates.push(Rate {
             id: format!("{}-{}", erc4626.address, block.number),
@@ -86,7 +92,7 @@ fn map_rates(
             block_number: block.number,
             erc4626: erc4626.address,
             convert_to_assets_rate: erc4626.convert_to_assets_rate.clone(),
-            apr: calculate_apr(apr, erc4626.convert_to_assets_rate.clone(), ROUNDED_ONE_DAY_IN_SECONDS),
+            apr: calculate_apr(previous_rate, erc4626.convert_to_assets_rate.clone(), time_delta),
         });
     });
 

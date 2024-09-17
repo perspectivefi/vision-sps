@@ -1,17 +1,17 @@
 specVersion: 0.0.4
-description: Ethereum Contract Tracking Subgraph (powered by Substreams)
+description: ERC4626 rates subgraph
 repository: https://github.com/graphprotocol/graph-tooling
 schema:
   file: schema.graphql
 dataSources:
   - kind: substreams
     name: substream_test
-    network: mainnet
+    network: base
     source:
-      startBlock: 18982509
+      startBlock: 16537641
       package:
         moduleName: graph_out
-        file: substream_test/substreams-test-v1.0.1.spkg
+        file: substream_test/erc4626-substreams-v1.0.1.spkg
     mapping:
       kind: substreams/graph-entities
       apiVersion: 0.0.5
