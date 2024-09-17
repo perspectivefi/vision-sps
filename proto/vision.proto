@@ -14,7 +14,7 @@ message ERC4626Token {
   string total_assets = 5;
   string total_supply = 6;
   string convert_to_assets_rate = 7;
-  string convert_to_shares_rate = 8;
+  uint64 ordinal = 8;
 }
 
 message Rates {
@@ -27,5 +27,5 @@ message Rate {
   uint64 block_number = 3;
   string erc4626 = 4;
   string convert_to_assets_rate = 5;
-  string convert_to_shares_rate = 6;
+  string apr = 6;
 }

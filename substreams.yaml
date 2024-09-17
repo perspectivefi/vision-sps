@@ -19,24 +19,36 @@ binaries:
 
 modules:
   - name: map_erc4626_tokens
-    initialBlock: 18982509
+    initialBlock: 20000000
     kind: map
     inputs:
       - source: sf.ethereum.type.v2.Block
     output:
       type: proto:ERC4626Tokens
 
-  - name: map_rates
-    initialBlock: 18982509
-    kind: map
+  - name: store_rates_for_last_7_days
+    initialBlock: 20000000
+    kind: store
+    updatePolicy: set
+    valueType: string
     inputs:
       - map: map_erc4626_tokens
       - source: sf.ethereum.type.v2.Block
     output:
+      type: proto:void
+
+  - name: map_rates
+    initialBlock: 20000000
+    kind: map
+    inputs:
+      - map: map_erc4626_tokens
+      - source: sf.ethereum.type.v2.Block
+      - store: store_rates_for_last_7_days
+    output:
       type: proto:Rates
 
   - name: graph_out
-    initialBlock: 18982509
+    initialBlock: 20000000
     kind: map
     inputs:
       - map: map_erc4626_tokens
