@@ -3,7 +3,7 @@ use substreams_ethereum::rpc::RpcBatch;
 use crate::abi::erc4626;
 use crate::pb::vision::{Erc4626Token};
 
-pub fn get_erc4626token(token_address: Vec<u8>) -> Option<Erc4626Token> {
+pub fn get_erc4626token(token_address: Vec<u8>, ordinal: u64) -> Option<Erc4626Token> {
     let batch = RpcBatch::new();
 
     let decimals = erc4626::functions::Decimals {}.call(token_address.clone()).unwrap_or(BigInt::from(0u64));
@@ -26,13 +26,13 @@ pub fn get_erc4626token(token_address: Vec<u8>) -> Option<Erc4626Token> {
             token_address.clone(),
         )
         .add(
-            erc4626::functions::ConvertToShares { assets: BigInt::from(10).pow(decimals.clone().into()) },
-            token_address.clone(),
-        )
-        .add(
             erc4626::functions::ConvertToAssets { shares: BigInt::from(10).pow(decimals.clone().into()) },
             token_address.clone(),
         )
+        // .add(
+        //     erc4626::functions::ConvertToShares { assets: BigInt::from(10).pow(decimals.clone().into()) },
+        //     token_address.clone(),
+        // )
         .execute()
         .unwrap()
         .responses;
@@ -77,19 +77,8 @@ pub fn get_erc4626token(token_address: Vec<u8>) -> Option<Erc4626Token> {
         }
     };
 
-
-    let convert_to_shares_rate: String;
-    match RpcBatch::decode::<_, erc4626::functions::ConvertToShares>(&responses[4]) {
-        Some(decoded_convert_to_shares) => {
-            convert_to_shares_rate = decoded_convert_to_shares.to_string();
-        }
-        None => {
-            convert_to_shares_rate = String::default();
-        }
-    };
-
     let convert_to_assets_rate: String;
-    match RpcBatch::decode::<_, erc4626::functions::ConvertToAssets>(&responses[5]) {
+    match RpcBatch::decode::<_, erc4626::functions::ConvertToAssets>(&responses[4]) {
         Some(decoded_convert_to_assets) => {
             convert_to_assets_rate = decoded_convert_to_assets.to_string();
         }
@@ -98,12 +87,21 @@ pub fn get_erc4626token(token_address: Vec<u8>) -> Option<Erc4626Token> {
         }
     };
 
+    // let convert_to_shares_rate: String;
+    // match RpcBatch::decode::<_, erc4626::functions::ConvertToShares>(&responses[5]) {
+    //     Some(decoded_convert_to_shares) => {
+    //         convert_to_shares_rate = decoded_convert_to_shares.to_string();
+    //     }
+    //     None => {
+    //         convert_to_shares_rate = String::default();
+    //     }
+    // };
+
     if !symbol.is_empty()
         && !decimals.is_zero()
         && !asset.is_empty()
         && !total_assets.is_zero()
         && !total_supply.is_zero()
-        && !convert_to_shares_rate.is_empty()
         && !convert_to_assets_rate.is_empty() {
         Some(Erc4626Token {
             address: format!("0x{}", Hex(&token_address.clone())),
@@ -112,8 +110,8 @@ pub fn get_erc4626token(token_address: Vec<u8>) -> Option<Erc4626Token> {
             asset,
             total_assets: total_assets.to_string(),
             total_supply: total_supply.to_string(),
-            convert_to_shares_rate: convert_to_shares_rate.clone(),
             convert_to_assets_rate: convert_to_assets_rate.clone(),
+            ordinal,
         })
     } else {
         None

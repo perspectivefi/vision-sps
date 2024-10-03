@@ -14,5 +14,5 @@ type Rate @entity {
     blockNumber: BigInt!
     erc4626: ERC4626!
     convertToAssetsRate: String!
-    convertToSharesRate: String!
+    apr: String!
 }
